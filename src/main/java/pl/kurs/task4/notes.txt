@@ -1,0 +1,9 @@
+Zadanie 04:
+Aplikacje mozesz odpalic jako PUBLIKATOR albo jako CONSUMER
+
+jesli odpalisz jako CONSUMER to jestes w trybie nasluchu i dostajesz wiadomosci publikowane przez PUBLIKATOROW
+jesli odpalisz jako PUBLIKATOR to jestes w stanie wyslac jedna wiadomosc do wszystkich CONSUMEROW (aktywnie polaczonych)
+
+uwaga: gdy nie ma zadnego aktywnego consuemra, wiadomosc musi poczekac tak dlugo az sie jakis pojawi.
+uwaga: moze byc wiele publikatorow i wielu consumerow, consumer otrzymuje wiadomosc od dowolnego publikatora
+uwaga[przez ktora mozna nie miec poprawki]: to zadanie NIE JEST implementacją komunikacji WĄTKOW w ramach JEDNEJ APLIKACJI a implementacją komunikacji APLIKACJI.

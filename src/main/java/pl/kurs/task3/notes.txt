@@ -1,0 +1,8 @@
+Zadanie 03:
+Stworz klase PrinterThread (letter, amount, interval)
+ktorego zadaniem bedzie wypisywanie litery LETTER co INTERNAL ms czasu AMOUNT razy
+np: A, 10, 100, ma wypisac literke A co 10 razy co 100 milisekund.
+
+Stworz 4 instancje printerthread'a
+
+niech trzy pierwsze uruchomią się od razu, a czwarta w momencie gdy chociaz jedna z trzech uruchomionych sie skonczy.
