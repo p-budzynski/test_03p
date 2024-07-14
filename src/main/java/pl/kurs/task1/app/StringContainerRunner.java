@@ -43,5 +43,15 @@ public class StringContainerRunner {
             System.out.println(fromFile.get(i));
         }
 
+//        fromFile.add("ala ma kota");
+
+        fromFile.add("00-117");
+        fromFile.add("99-100");
+
+        System.out.println("Loaded from file:");
+        for (int i = 0; i < fromFile.size(); i++) {
+            System.out.println(fromFile.get(i));
+        }
+
     }
 }

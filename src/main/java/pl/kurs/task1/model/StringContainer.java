@@ -1,18 +1,16 @@
 package pl.kurs.task1.model;
 
-import pl.kurs.task1.exceptions.DuplicatedElementOnListException;
-import pl.kurs.task1.exceptions.InvalidStringContainerPatternException;
-import pl.kurs.task1.exceptions.InvalidStringContainerValueException;
+import pl.kurs.task1.exceptions.*;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
-public class StringContainer {
-    private static final String REGEX_SEMICOLON = ";";
+public class StringContainer implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    private static class Node {
+    private static class Node implements Serializable {
         String value;
         LocalDateTime dateTime;
         Node next;
@@ -109,7 +107,6 @@ public class StringContainer {
         if (index < 0 || index >= size()) {
             throw new IndexOutOfBoundsException("Index: " + index);
         }
-
         Node current = head;
         for (int i = 0; i < index; i++) {
             current = current.next;
@@ -131,49 +128,20 @@ public class StringContainer {
         return result;
     }
 
-    public void storeToFile(String fileName) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            String patternLine = pattern.pattern();
-            String duplicated = String.valueOf(noDuplicates);
-            writer.write(patternLine + REGEX_SEMICOLON + duplicated + "\n");
-            Node current = head;
-            while (current != null) {
-                writer.write(current.value + REGEX_SEMICOLON + current.dateTime + "\n");
-                current = current.next;
-            }
+    public void storeToFile(String fileName) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            outputStream.writeObject(this);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static StringContainer fromFile(String fileName) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line = reader.readLine();
-            if (line == null || line.isEmpty()) {
-                throw new IllegalArgumentException("Invalid input: Empty or null line detected.");
-            }
-            String[] split = line.split(REGEX_SEMICOLON);
-
-            String pattern = split[0];
-            boolean duplicate = Boolean.parseBoolean(split[1]);
-
-            StringContainer result = new StringContainer(pattern, duplicate);
-
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(REGEX_SEMICOLON);
-
-                String value = parts[0];
-                LocalDateTime dateTime = LocalDateTime.parse(parts[1], DateTimeFormatter.ISO_DATE_TIME);
-                Node newNode = new Node(value, dateTime);
-                if (result.head == null) {
-                    result.head = newNode;
-                } else {
-                    Node current = result.head;
-                    while (current.next != null) {
-                        current = current.next;
-                    }
-                    current.next = newNode;
-                }
-            }
-            return result;
+    public static StringContainer fromFile(String fileName) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            return (StringContainer) inputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

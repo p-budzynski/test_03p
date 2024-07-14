@@ -30,5 +30,11 @@ public class ObjectContainerRunner {
         peopleFromWarsaw.storeToFile("warsawPeople.txt");
 
         ObjectContainer<Person> peopleFromWarsawFromFile = ObjectContainer.fromFile("warsawPeople.txt");
+
+        System.out.println(peopleFromWarsawFromFile.add(new Person("Ryszard", "Poznań", 44)));
+        System.out.println(peopleFromWarsawFromFile.add(new Person("Barbara", "Warsaw", 33)));
+
+        System.out.println(peopleFromWarsawFromFile);
+
     }
 }

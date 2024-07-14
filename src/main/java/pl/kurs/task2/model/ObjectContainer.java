@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 
 public class ObjectContainer<T> implements Serializable {
 
-    private static class Node<T> {
+    private static class Node<T> implements Serializable {
         T data;
         Node<T> next;
 
@@ -18,10 +18,10 @@ public class ObjectContainer<T> implements Serializable {
         }
     }
 
-    private Predicate<T> condition;
+    private SerializablePredicate<T> condition;
     private Node<T> head;
 
-    public ObjectContainer(Predicate<T> condition) {
+    public ObjectContainer(SerializablePredicate<T> condition) {
         this.condition = condition;
     }
 
@@ -93,31 +93,19 @@ public class ObjectContainer<T> implements Serializable {
 
     public void storeToFile(String fileName) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
-            Node<T> current = head;
-            while (current != null) {
-                oos.writeObject(current.data);
-                current = current.next;
-            }
+            oos.writeObject(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static <T> ObjectContainer<T> fromFile(String fileName) {
-        ObjectContainer<T> objectContainer = new ObjectContainer<>();
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
-            while (true) {
-                try {
-                    T obj = (T) inputStream.readObject();
-                    objectContainer.add(obj);
-                } catch (EOFException ex) {
-                    break;
-                }
-            }
+            return (ObjectContainer<T>) inputStream.readObject();
         } catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
+            return null;
         }
-        return objectContainer;
     }
 
     @Override
