@@ -11,7 +11,7 @@ public class PrinterThreadRunner {
         PrinterThread pt3 = new PrinterThread('C', 10, 100);
         PrinterThread pt4 = new PrinterThread('X', 5, 100);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
         CompletionService<Void> completionService = new ExecutorCompletionService<>(executorService);
 
         completionService.submit(pt1, null);
